@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="/CSS/home.css">
+
+</head>
+<body>
+    <div id="login-form">
+        <!-- Your login form HTML here -->
+        <h2>Sign in</h2>
+        <form onsubmit="return loginUser()">
+            <input type="text" id="username" name="username" placeholder="Username">
+            <div class="error" id="username-error"></div>
+            <input type="password" id="password" name="password" placeholder="Password">
+            <div class="error" id="password-error"></div>
+            <input type="submit" value="Login">
+            <div class="signup-link">
+                <span>Don't have an account? <a href="/SignUp" id="signup-link">Sign up</a></span>
+                <script>
+                    document.getElementById('signup-button').addEventListener('click', function() {
+                      alert('Welcome!');
+                      window.location.href = '/home2'; // Assuming '/home' is the route to home.ejs
+                    });
+                  </script>
+            </div>
+        </form>
+        <!-- Social media icons -->
+        <div class="social-icons">
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-instagram"></a>
+        </div>
+    </div>
+
+</html>
+<script>
+    function validateForm() {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+
+    // Perform validation
+    if (username === 'admin' && password === 'password123') {
+        window.location.href = 'home.html';
+        return false; // Prevent form from submitting
+    } else {
+        alert('Invalid username or password');
+        return false;
+    }
+}
+
+</script>
