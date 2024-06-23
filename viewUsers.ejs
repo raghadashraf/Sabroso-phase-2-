@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Saved Users</title>
+    <link rel="stylesheet" href="CSS/admin.css">
+    <link rel="stylesheet" href="CSS/viewUsers.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>View Users</h2>
+        <ul>
+            <li><a href="admin">Back</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>View Users Data</h2>
+        <div class="forms-container"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+<script>
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const formsContainer = document.querySelector('.forms-container');
+    for (let i = 0; i < 20; i++) {
+        const formHTML = `
+            <div class="form-container">
+                <form>
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username${i}" name="username" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email${i}" name="email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone${i}" name="phone" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">SignUp Date:</label>
+                        <input type="text" id="date${i}" name="date" readonly>
+                    </div>
+                </form>
+            </div>
+        `;
+        formsContainer.insertAdjacentHTML('beforeend', formHTML);
+
+        let dateInput = document.getElementById(`date${i}`);
+        let today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+    }
+});
+
+</script>
