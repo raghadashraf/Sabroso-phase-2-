@@ -6,7 +6,7 @@
     <title>Sign Up Form</title>
     <link rel="stylesheet" href="CSS/home.css">
     <link rel="stylesheet" href="CSS/SignUP.css">
-    <script src="JS/script.js" defer></script>
+    <script src="../public/JS/script.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 <body>
@@ -19,8 +19,6 @@
             <a href="MainMenu">Menu</a>
             <a href="about">About</a>
             <a href="reservation">Reservation</a>
-            <a href="feedback">Feedback</a>
-            <a href="myProfile">My Profile</a>
         </nav>
     </header>
     <div class="container" id="container">
@@ -32,19 +30,13 @@
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <span>or use your account</span>
+                <span>or Create your account</span>
                 <input type="text" id="name" placeholder="Name" required />
                 <input type="email" id="email" placeholder="Email" required />
                 <input type="password" id="password" placeholder="Password" required />
                 <input type="tel" id="telephone" placeholder="Telephone" required />
                 <button type="submit" id="signup-button">Sign Up</button>
-                <script>
-                  document.getElementById('signup-button').addEventListener('click', function() {
-                    alert('Welcome!');
-                    window.location.href = '/home2'; // Assuming '/home' is the route to home.ejs
-                  });
-                </script>
-                
+                <a href="/home" id="signin-button" type="button">Already have an account?</a>
             </form>
         </div>
         <div class="overlay-container">
@@ -57,40 +49,46 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const signupForm = document.getElementById('signupForm');
+      document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.getElementById('signupForm');
 
-            signupForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
+    signupForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const telephone = document.getElementById('telephone').value;
+        const UserName = document.getElementById('name').value;
+        const Email = document.getElementById('email').value;
+        const Password = document.getElementById('password').value;
+        const PhoneNo = document.getElementById('telephone').value;
 
-                const data = { name, email, password, telephone };
+        const data = { UserName, Email, Password, PhoneNo, role: "customer" };
 
-                try {
-                    const response = await fetch('/register', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    const result = await response.text();
-
-                    if (response.ok) {
-                        console.log('Success:', result);
-                    } else {
-                        console.log('Error:', result);
-                    }
-                } catch (error) {
-                    console.log('Fetch error:', error);
-                }
+        try {
+            const response = await fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
             });
-        });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                console.log('Success:', result);
+                alert(`Welcome, ${UserName}!`);
+                // Redirect to home2.ejs with object ID in the URL
+                window.location.href = `/home2?id=${result._id}`;
+            } else {
+                console.log('Error:', result);
+                alert('Error: ' + (result.message || 'Failed to sign up.'));
+            }
+        } catch (error) {
+            console.log('Fetch error:', error);
+            alert('Fetch error: ' + error.message);
+        }
+    });
+});
+
     </script>
 </body>
 </html>
