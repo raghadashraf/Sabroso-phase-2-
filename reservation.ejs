@@ -8,7 +8,7 @@
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="CSS/Reservation.css" />
     <link rel="stylesheet" href="CSS/home.css" />
-    <script src="JS/script.js" defer></script>
+    <script src="../public/JS/script.js" defer></script>
 
     <title>Book A Table</title>
 </head>
@@ -19,19 +19,10 @@
         </a>
         <nav class="navigation">
             <a href="home">Home</a>
-            <div class="dropdown">
-                <button class="dropbtn">Menu <i class="fa fa-caret-down"></i></button>
-                <div class="dropdown-content">
-                    <a href="/MainMenu">Main Menu</a>
-                    <a href="/appetizers">Appetizers</a>
-                    <a href="/mainDishes">Main Dishes</a>
-                    <a href="/desserts">Desserts</a>
-                    <a href="/drinks">Drinks</a>
-                </div>
-            </div>
-            <a href="/about">About</a>
-            <a href="/reservation">Reservation</a>
-            <a href="/myProfile">My Profile</a>
+            <a href="MainMenu">Menu</a>
+            <a href="about">About</a>
+            <a href="reservation">Reservation</a>
+            <a href="myProfile">My Profile</a>
         </nav>
     </header>
     <section class="page restaurant">
@@ -42,7 +33,7 @@
         <div class="page-content">
             <section>
                 <h2>Reservation</h2>
-                <form id="reservationForm">
+                <form id="reservationForm" onsubmit="return validateForm()">
                     <div class="input-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" required />
@@ -55,12 +46,12 @@
                         <div class="input-group">
                             <label for="date">Date</label>
                             <input type="date" id="date" required />
-                            <div class="error-message" id="date-error"></div>
+                            <div id="date-error" class="error-message"></div>
                         </div>
                         <div class="input-group">
                             <label for="time">Time</label>
                             <input type="time" id="time" required />
-                            <div class="error-message" id="time-error"></div>
+                            <div id="time-error" class="error-message"></div>
                         </div>
                         <div class="input-group">
                             <label for="person">Number of Person</label>
@@ -69,9 +60,6 @@
                     </div>
                     <button id="bookTableButton" class="form-btn" type="submit">BOOK A TABLE</button>
                 </form>
-                <div id="success-message" class="success-message" style="display: none;">
-                    You have successfully booked a table!
-                </div>
             </section>
         </div>
     </section>
@@ -82,7 +70,6 @@
             const timeInput = document.getElementById('time');
             const dateError = document.getElementById('date-error');
             const timeError = document.getElementById('time-error');
-            const successMessage = document.getElementById('success-message');
 
             function validateDateAndTime() {
                 const now = new Date();
@@ -90,18 +77,15 @@
                 const selectedTime = timeInput.value.split(':');
                 selectedDate.setHours(selectedTime[0], selectedTime[1]);
 
-                let isValid = true;
-
                 if (selectedDate < now) {
-                    dateError.textContent = "The selected date and time must be in the future.";
-                    timeError.textContent = "The selected date and time must be in the future.";
-                    isValid = false;
+                    dateError.textContent = "The selected date must be in the future.";
+                    timeError.textContent = "The selected time must be in the future.";
+                    return false;
                 } else {
                     dateError.textContent = "";
                     timeError.textContent = "";
+                    return true;
                 }
-
-                return isValid;
             }
 
             reservationForm.addEventListener('submit', async (event) => {
@@ -113,19 +97,19 @@
 
                 const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
-                const date = document.getElementById('date').value;
-                const time = document.getElementById('time').value;
+                const date = dateInput.value;
+                const time = timeInput.value;
                 const person = document.getElementById('person').value;
 
-                const data = {
-                    User: name,
+                const data = { 
+                    Email: email,
                     ReservationDate: date,
                     ReservationTime: time,
                     NumberOfGuests: person
                 };
 
                 try {
-                    const response = await fetch('/reservation', {
+                    const response = await fetch('/reservations', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -136,9 +120,13 @@
                     const result = await response.json();
 
                     if (response.ok) {
-                        successMessage.style.display = 'block';
-                        reservationForm.reset();
                         console.log('Reservation successful:', result);
+                        alert('Reservation Successful :)');
+                        document.getElementById("name").value = "";
+                        document.getElementById("email").value = "";
+                        document.getElementById("date").value = "";
+                        document.getElementById("time").value = "";
+                        document.getElementById("person").value = "";
                     } else {
                         console.log('Error:', result.message);
                     }
