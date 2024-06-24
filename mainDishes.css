@@ -15,14 +15,43 @@ body {
     min-height: 100vh;
 }
 
+header {
+    background-color: #1f1b1a;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.logo {
+    max-width: 100px; /* Adjust as needed */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Center the logo */
+}
+
+.navigation {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.navigation a {
+    color: #F2EECB;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.navigation a:hover {
+    text-decoration: underline;
+}
 
 /* Main Dishes section styles */
 .maintitle {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 40px;
+    font-size: 10vb;
     color: rgb(242, 238, 203);
     font-weight: normal;
-    text-align: left;
+    text-align: center;
     padding-top: 3.5vb;
 }
 
