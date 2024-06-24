@@ -1,0 +1,105 @@
+/* Base styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f3f3;
+    color: #555;
+}
+
+header {
+    background-color: #1b4f1d;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.content {
+    padding: 20px;
+    text-align: center;
+    max-width: 800px; /* Example of maximum width for content */
+    margin: 0 auto; /* Center-align content */
+}
+
+.about {
+    max-width: 100%;
+    height: auto; /* Adjusted to auto to fit content */
+    margin-bottom: 40px; /* Adjusted to create space above the footer */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+h1 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 50px;
+    margin: 30px 0; /* Adjusted margin */
+    color: #686868;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 1.2;
+    letter-spacing: 1px;
+}
+
+p {
+    font-weight: bold;
+    margin-bottom: 20px; /* Reduced bottom margin for paragraph */
+    margin-top: 10px;
+    color: #686868;
+    font-family: "Open Sans", sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(255, 255, 255); /* Transparent background color */
+    color: #fff;
+    text-align: center;
+    padding: 10px 0; /* Adjusted padding */
+    height: 30px; /* Adjusted height */
+    transition: all 0.3s ease; /* Smooth transition */
+    z-index: 999; /* Ensure footer is above other content */
+}
+
+/* Hover Effect */
+footer:hover {
+    transform: translateY(-10px); /* Move footer up by 10px on hover */
+    background-color: rgba(47, 47, 47, 0.8); /* Darken background color on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add box shadow for depth */
+}
+
+/* Media Queries for Responsive Design */
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 40px; /* Adjusted font size for smaller screens */
+        margin: 20px 0; /* Adjusted margin */
+    }
+
+    p {
+        font-size: 16px; /* Adjusted font size for smaller screens */
+        line-height: 1.4;
+    }
+
+    .about {
+        margin-top: 50px;
+        margin-bottom: 80px; /* Adjusted margin for smaller screens */
+    }
+
+    footer {
+        position: static; /* Override fixed position for smaller screens */
+        margin-top: 20px; /* Example: Add space above the footer */
+        background-color: rgba(47, 47, 47, 0.5); /* Transparent background color */
+        height: 20px; /* Adjusted height for smaller screens */
+    }
+
+    /* No hover effect on smaller screens */
+    footer:hover {
+        transform: none; /* Remove transform on hover */
+        background-color: rgb(255, 255, 255); /* Reset background color */
+        box-shadow: none; /* Remove box shadow */
+    }
+}
