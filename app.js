@@ -1,10 +1,9 @@
 const express = require('express');
+const fs = require('fs');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
-
 const usersRoute = require('./routes/usersRoute.js');
 const reservationsRoute = require('./routes/reservationsRoute.js');
 const menuRoute = require('./routes/menuRoute.js');
@@ -13,6 +12,8 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0';
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,24 +23,25 @@ app.use(express.json());
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/Images')));
+app.use(express.static(path.join(__dirname, 'public/JS')));
+
 
 // Set the views directory and view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Define routes that render the EJS templates
+// Define a route that renders the EJS template
 app.get('/', (req, res) => {
   res.render('home');
 });
 app.get('/home', (req, res) => {
   res.render('home');
 });
-app.get('/home2', (req, res) => {
-  res.render('home2');
-});
 app.get('/MainMenu', (req, res) => {
   res.render('MainMenu');
 });
+
 app.get('/about', (req, res) => {
   const aboutFilePath = path.join(__dirname, 'about.txt');
   fs.readFile(aboutFilePath, 'utf8', (err, data) => {
@@ -70,7 +72,6 @@ app.get('/editAbout', (req, res) => {
             <ul>
               <li><a href="viewproducts">View Products</a></li>
               <li><a href="addproducts">Add Products</a></li>
-              <li><a href="addcategory">Add Category</a></li>
               <li><a href="viewReser">View Reservations</a></li>
               <li><a href="viewUsers">View Users</a></li>
               <li><a href="/editAbout">Edit About</a></li>
@@ -90,6 +91,10 @@ app.get('/editAbout', (req, res) => {
 });
 });
 
+
+app.get('/about', (req, res) => {
+  res.render('about');
+});
 app.get('/feedback', (req, res) => {
   res.render('feedback');
 });
@@ -111,20 +116,14 @@ app.get('/appetizers', (req, res) => {
 app.get('/addproducts', (req, res) => {
   res.render('addproducts');
 });
-app.get('/addcategory', (req, res) => {
-  res.render('addcategory');
-});
 app.get('/admin', (req, res) => {
   res.render('admin');
 });
 app.get('/myProfile', (req, res) => {
   res.render('myProfile');
 });
-app.get('/SignIn', (req, res) => {
-  res.render('SignIn');
-});
 app.get('/SignUp', (req, res) => {
-  res.render('SignUp');
+  res.render('Sign Up');
 });
 app.get('/viewcate', (req, res) => {
   res.render('viewcate');
@@ -135,18 +134,22 @@ app.get('/viewproducts', (req, res) => {
 app.get('/viewReser', (req, res) => {
   res.render('viewReser');
 });
+app.get('/viewUsers', (req, res) => {
+  res.render('viewUsers');
+});
 
-// Middleware for error handling
+
 app.use((err, req, res, next) => {
   console.error(err.message);
   res.status(500).send('Internal Server Error');
 });
 
-// Use the defined routes
 app.use('/users', usersRoute);
 app.use('/reservations', reservationsRoute);
 app.use('/menu', menuRoute);
 app.use('/api/auth', authRoute);
+
+//About edit 
 
 // Route to handle form submission
 app.post('/editAbout', (req, res) => {
@@ -159,50 +162,17 @@ app.post('/editAbout', (req, res) => {
   });
 });
 
-// Connect to MongoDB and start the server
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to database");
     app.listen(PORT, () => {
-      console.log(`Server is running at http://localhost:${PORT}`);
+      console.log(`Server is running at http://sabroso-restaurant.xyz:${PORT}`);
     });
   })
   .catch(error => {
     console.error("Connection failed", error.message);
   });
 
-// Router for reservation operations
-const router = express.Router();
-
-// Get all reservations
-router.get('/', async (req, res) => {
-  try {
-    const reservations = await Reservation.find({}).populate('User');
-    return res.status(200).json({
-      count: reservations.length,
-      data: reservations
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send({ message: "Internal Server Error" });
-  }
-});
-
-// Delete a reservation by ID
-router.delete('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await Reservation.findByIdAndDelete(id);
-
-    if (!result) {
-      return res.status(404).json({ message: 'Reservation not found' });
-    }
-
-    return res.status(200).send({ message: 'Reservation deleted successfully' });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send({ message: "Internal Server Error" });
-  }
-});
-
-app.use('/reservations', router);
